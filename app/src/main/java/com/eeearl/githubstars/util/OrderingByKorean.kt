@@ -4,6 +4,7 @@ import com.eeearl.githubstars.util.CharUtil.isKorean
 import com.eeearl.githubstars.util.CharUtil.isNumber
 import com.eeearl.githubstars.util.CharUtil.isAlphabet
 import com.eeearl.githubstars.util.CharUtil.isSpecial
+import java.util.Locale
 
 /**
  * String 을 한글 > 영어 > 숫자 > 특수문자 순으로 정열해주는 Sort 클래스
@@ -16,8 +17,8 @@ object OrderingByKorean {
 
     @JvmStatic
     fun compare(left: String, right: String) : Int {
-        val filteredLeft = left.toUpperCase().replace(" ", "")
-        val filteredRight = right.toUpperCase().replace(" ", "")
+        val filteredLeft = left.uppercase(Locale.ROOT).replace(" ", "")
+        val filteredRight = right.uppercase(Locale.ROOT).replace(" ", "")
 
         val leftLen = filteredLeft.length
         val rightLen = filteredRight.length
@@ -28,17 +29,17 @@ object OrderingByKorean {
             val rightCh = filteredRight[i]
 
             if (leftCh != rightCh) {
-                if (isKoreanAndEnglish(leftCh, rightCh) || isKoreanAndNumber(leftCh, rightCh)
+                return if (isKoreanAndEnglish(leftCh, rightCh) || isKoreanAndNumber(leftCh, rightCh)
                     || isEnglishAndNumber(leftCh, rightCh) || isKoreanAndSpecial(leftCh, rightCh)) {
-                    return (leftCh - rightCh) * REVERSE
+                    (leftCh - rightCh) * REVERSE
                 } else if (isEnglishAndSpecial(leftCh, rightCh) || isNumberAndSpecial(leftCh, rightCh)) {
                     if (isAlphabet(leftCh) || isNumber(leftCh)) {
-                        return LEFT_FIRST
+                        LEFT_FIRST
                     } else {
-                        return RIGHT_FIRST
+                        RIGHT_FIRST
                     }
                 } else {
-                    return leftCh - rightCh
+                    leftCh - rightCh
                 }
             }
         }

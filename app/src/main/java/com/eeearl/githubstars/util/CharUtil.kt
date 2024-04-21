@@ -9,7 +9,7 @@ object CharUtil {
 
   @JvmStatic
   fun isKorean(ch: Char): Boolean {
-    return ch.toInt() in Integer.parseInt("AC00", 16)..Integer.parseInt("D7A3", 16)
+    return ch.code in Integer.parseInt("AC00", 16)..Integer.parseInt("D7A3", 16)
   }
 
   @JvmStatic
