@@ -44,15 +44,18 @@ class SearchUserRemoteViewModel: ViewModel(), Callback<SearchUserResponse> {
         mSearchText.set(text.toString())
     }
 
-    override fun onFailure(call: Call<SearchUserResponse>?, t: Throwable?) {
+    override fun onFailure(call: Call<SearchUserResponse>, t: Throwable) {
         println(t.toString())
     }
 
-    override fun onResponse(call: Call<SearchUserResponse>?, response: Response<SearchUserResponse>) {
+    override fun onResponse(
+        call: Call<SearchUserResponse>,
+        response: Response<SearchUserResponse>
+    ) {
 
         when (response.isSuccessful) {
             true -> {
-                var list = ArrayList<SearchUserRowRemoteItem>()
+                val list = ArrayList<SearchUserRowRemoteItem>()
 
                 response.body()?.userItems?.
                     filter { it.name != null }?.

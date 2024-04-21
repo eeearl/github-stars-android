@@ -59,7 +59,7 @@ class SearchUserListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        var type = SearchUserType.valueOf(viewType)
+        val type = SearchUserType.valueOf(viewType)
         when (type) {
             SearchUserType.SECTION -> {
                 val binding: ViewDataBinding = DataBindingUtil.inflate(
@@ -111,7 +111,7 @@ class SearchUserListAdapter(
                 removeAlsoIndexItem = true
 
                 // 바로 밑의 아이템이 Section이 아니라 다른 아이템이 들어있다면 Section을 삭제하지 않는다.
-                if (mList.size - 1 >= position + 1 && !(mList[position + 1] is SearchUserRowSection)) {
+                if (mList.size - 1 >= position + 1 && mList[position + 1] !is SearchUserRowSection) {
                     removeAlsoIndexItem = false
                 }
             }
@@ -131,7 +131,9 @@ class SearchUserListAdapter(
 
         // 한글 > 영어 > 숫자 > 특문 순 정열
         Collections.sort(list, kotlin.Comparator { t, t2 ->
-            OrderingByKorean.compare(t.name.toUpperCase(), t2.name.toUpperCase())
+            OrderingByKorean.compare(t.name.uppercase(Locale.getDefault()),
+                t2.name.uppercase(Locale.getDefault())
+            )
         })
 
         mList.addAll(list)
@@ -184,17 +186,17 @@ class SearchUserListAdapter(
     // 리스트의 인덱스를 추출한다.
     private fun sortIndexes(sortedList: List<SearchUserRowItemType>): MutableMap<Char, Int> {
 
-        var indexMap = mutableMapOf<Char, Int>()
+        val indexMap = mutableMapOf<Char, Int>()
 
         if (sortedList.isNotEmpty()) {
-            val initChar = sortedList.first().name[0].toUpperCase()
+            val initChar = sortedList.first().name[0].uppercaseChar()
             val initCharIndex = if (CharUtil.isKorean(initChar)) KoreanCharacterUtil.getCompatChoseong(initChar) else initChar
 
             indexMap[initCharIndex] = 0
 
             for (i in 0 until sortedList.size - 1) {
-                val currentChar = sortedList[i].name[0].toUpperCase()
-                val nextChar = sortedList[i + 1].name[0].toUpperCase()
+                val currentChar = sortedList[i].name[0].uppercaseChar()
+                val nextChar = sortedList[i + 1].name[0].uppercaseChar()
                 val currentCharIndex = if (CharUtil.isKorean( currentChar ) ) KoreanCharacterUtil.getCompatChoseong(currentChar) else currentChar
                 val nextCharIndex = if (CharUtil.isKorean( nextChar ) ) KoreanCharacterUtil.getCompatChoseong(nextChar) else nextChar
 

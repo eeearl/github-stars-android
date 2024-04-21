@@ -27,10 +27,10 @@ object KoreanCharacterUtil {
 
     private fun getChoseongIndex(syllable: Char): Int {
         val sylIndex = syllable - HANGUL_SYLLABLES_BASE
-        return sylIndex.toInt() / (JUNGSEONG_COUNT * JONGSEONG_COUNT)
+        return sylIndex.code / (JUNGSEONG_COUNT * JONGSEONG_COUNT)
     }
 
     private fun isSyllable(c: Char): Boolean {
-        return HANGUL_SYLLABLES_BASE <= c.toInt() && c.toInt() < HANGUL_SYLLABLES_END
+        return HANGUL_SYLLABLES_BASE <= c.code && c.code < HANGUL_SYLLABLES_END
     }
 }
