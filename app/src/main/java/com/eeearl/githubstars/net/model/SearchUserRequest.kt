@@ -24,6 +24,6 @@ data class SearchUserRequestData (
     val page: Int,
     val perPage: Int
 ) {
-    var username: String = ""
+    val username: String
         get() = "$_username in:fullname"
 }

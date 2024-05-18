@@ -6,7 +6,7 @@ import com.eeearl.githubstars.net.model.SearchUserResponse
 import okhttp3.OkHttpClient
 import retrofit2.Callback
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.jackson.JacksonConverterFactory
 
 /**
  * API 호출 클래스
@@ -20,7 +20,7 @@ object ApiClient {
     @JvmStatic
     private var retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(JacksonConverterFactory.create())
         .client(httpClient)
 
         .build()

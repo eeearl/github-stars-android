@@ -50,7 +50,7 @@ dependencies {
 
     // Retrofit [https://github.com/square/retrofit]
     implementation libs.retrofit
-    implementation libs.converter.gson
+    implementation libs.converter.jackson
     implementation libs.adapter.rxjava2
 
     // OkHttp [https://github.com/square/okhttp]
@@ -58,6 +58,9 @@ dependencies {
 
     implementation libs.glide
     annotationProcessor libs.compiler
+
+    implementation libs.jackson.core
+    implementation libs.jackson.annotations
 
     testImplementation libs.junit
     androidTestImplementation libs.runner

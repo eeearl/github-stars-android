@@ -1,22 +1,25 @@
 package com.eeearl.githubstars.net.model
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class SearchUserResponse (
-    @SerializedName("total_count")
+    @JsonProperty("total_count")
     val totalCount: Int,
-    @SerializedName("items")
+    @JsonProperty("items")
     val userItems: List<UserItem>
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class UserItem (
-    @SerializedName("id")
+    @JsonProperty("id")
     val id: Int,
-    @SerializedName("avatar_url")
+    @JsonProperty("avatar_url")
     val avatarUrl: String,
-    @SerializedName("login")
+    @JsonProperty("login")
     val login: String,
-    @SerializedName("text_matches")
+    @JsonProperty("text_matches")
     private val textMatches: List<TextMatches>
 ) {
     val name: String?
@@ -26,13 +29,14 @@ data class UserItem (
         }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class TextMatches(
-    @SerializedName("object_url")
+    @JsonProperty("object_url")
     val objectUrl: String,
-    @SerializedName("object_type")
+    @JsonProperty("object_type")
     val objectType: String,
-    @SerializedName("property")
+    @JsonProperty("property")
     val property: String?,
-    @SerializedName("fragment")
+    @JsonProperty("fragment")
     val fragment: String?
 )
