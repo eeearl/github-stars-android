@@ -15,8 +15,10 @@ object ApiClient {
 
     private const val baseUrl = "https://api.github.com/"
 
-    @JvmStatic private var httpClient: OkHttpClient = OkHttpClient().newBuilder().build()
-    @JvmStatic private var retrofit: Retrofit = Retrofit.Builder()
+    @JvmStatic
+    private var httpClient: OkHttpClient = OkHttpClient().newBuilder().build()
+    @JvmStatic
+    private var retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .client(httpClient)

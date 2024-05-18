@@ -19,13 +19,15 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object SearchUserBindingAdapter {
-    @JvmStatic @BindingAdapter("searchUserListItems")
+    @JvmStatic
+    @BindingAdapter("searchUserListItems")
     fun RecyclerView.setList(list: List<SearchUserRowItemType>) {
         val adapter = this.adapter as SearchUserListAdapter
         adapter.setList(list)
     }
 
-    @JvmStatic @BindingAdapter("imageFromUrl")
+    @JvmStatic
+    @BindingAdapter("imageFromUrl")
     fun AppCompatImageView.setImageUrl(url: String) {
         Glide.with(context)
             .load(url)
