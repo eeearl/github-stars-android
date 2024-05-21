@@ -25,6 +25,7 @@ android {
 
     buildFeatures {
         dataBinding = true
+        compose = true
     }
 
     lint {
@@ -34,6 +35,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = '1.5.8'
     }
 
     kotlinOptions {
@@ -67,4 +72,16 @@ dependencies {
     androidTestImplementation libs.espresso.core
     implementation libs.lifecycle.extensions
 
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.05.00')
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation "androidx.compose.runtime:runtime"
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.foundation:foundation"
+    implementation "androidx.compose.foundation:foundation-layout"
+    implementation "androidx.compose.material:material"
+    implementation "androidx.compose.runtime:runtime-livedata"
+    implementation "androidx.compose.ui:ui-tooling"
 }
