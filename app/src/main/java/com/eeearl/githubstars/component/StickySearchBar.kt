@@ -2,6 +2,7 @@ package com.eeearl.githubstars.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun StickySearchBar(
@@ -31,7 +33,15 @@ fun StickySearchBar(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    Row {
+    val hideKeyboardAction = { searchText: String ->
+        keyboardController?.hide()
+        focusManager.clearFocus()
+        onClickSearchButton.invoke(searchText)
+    }
+
+    Row(
+        modifier = Modifier.padding(end = 4.dp)
+    ) {
         TextField(
             value = text,
             onValueChange = { text = it },
@@ -52,8 +62,7 @@ fun StickySearchBar(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
+                    hideKeyboardAction.invoke(text)
                 }
             ),
             singleLine = true,
