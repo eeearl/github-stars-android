@@ -1,14 +1,11 @@
 package com.eeearl.githubstars.ui
 
-import android.content.Context
-import android.gesture.Prediction
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -17,21 +14,14 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.databinding.DataBindingUtil
-import com.eeearl.githubstars.R
 import com.eeearl.githubstars.component.SearchLocalUserScreen
 import com.eeearl.githubstars.component.SearchRemoteUserScreen
-import com.eeearl.githubstars.databinding.ActivitySearchUserBinding
 import com.eeearl.githubstars.db.DatabaseService
 import com.eeearl.githubstars.ui.local.SearchUserLocalViewModel
 import com.eeearl.githubstars.ui.remote.SearchUserRemoteViewModel

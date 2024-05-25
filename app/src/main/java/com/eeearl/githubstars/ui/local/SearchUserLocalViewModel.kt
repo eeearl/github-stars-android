@@ -26,7 +26,9 @@ class SearchUserLocalViewModel(
     }
 
     override fun onFetch(data: List<SearchUserRowLocalItem>) {
-        _uiState.value = _uiState.value.copy(searchList = data)
+        _uiState.update {
+            it.copy(searchList = data)
+        }
     }
 
     fun onCheckFavorite(id: Int) {

@@ -90,9 +90,23 @@ class SearchUserRemoteViewModel(
     fun onCheckFavorite(user: SearchUserRowRemoteItem, isChecked: Boolean) {
         if (databaseService.existUser(user.id)) {
             databaseService.deleteUser(user.id)
-//            val new = user.copy(favorite = isChecked)
         } else {
             databaseService.insertUser(user.id, user.name, user.thumbnailUrl)
+        }
+
+        val newItemIndex = _uiState.value.searchList.indexOf(user)
+        val newList = _uiState.value.searchList.mapIndexed { index, searchUserRowRemoteItem ->
+            if (index == newItemIndex) {
+                searchUserRowRemoteItem.copy(favorite = isChecked)
+            } else {
+                searchUserRowRemoteItem
+            }
+        }
+
+        _uiState.update {
+            it.copy(
+                searchList = newList
+            )
         }
     }
 

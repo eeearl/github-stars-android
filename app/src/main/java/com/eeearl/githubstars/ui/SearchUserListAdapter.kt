@@ -19,7 +19,7 @@ enum class SearchUserType(val rawValue: Int) {
     SECTION(1), REMOTE_ITEM(2), LOCAL_ITEM(3);
 
     companion object {
-        fun valueOf(value: Int) = values().find { it.rawValue == value }
+        fun valueOf(value: Int) = entries.find { it.rawValue == value }
     }
 }
 

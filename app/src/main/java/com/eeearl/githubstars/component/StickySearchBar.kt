@@ -69,7 +69,7 @@ fun StickySearchBar(
         )
         IconButton(
             onClick = {
-                onClickSearchButton.invoke(text)
+                hideKeyboardAction.invoke(text)
             },
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
