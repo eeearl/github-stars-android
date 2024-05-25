@@ -10,13 +10,17 @@ android {
 
     defaultConfig {
         applicationId "com.eeearl.githubstars"
-        minSdk 29
+        minSdk 28
         targetSdk 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -25,6 +29,7 @@ android {
 
     buildFeatures {
         dataBinding = true
+        compose = true
     }
 
     lint {
@@ -34,6 +39,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = '1.5.8'
     }
 
     kotlinOptions {
@@ -50,7 +59,7 @@ dependencies {
 
     // Retrofit [https://github.com/square/retrofit]
     implementation libs.retrofit
-    implementation libs.converter.gson
+    implementation libs.converter.jackson
     implementation libs.adapter.rxjava2
 
     // OkHttp [https://github.com/square/okhttp]
@@ -59,9 +68,25 @@ dependencies {
     implementation libs.glide
     annotationProcessor libs.compiler
 
+    implementation libs.jackson.core
+    implementation libs.jackson.annotations
+
     testImplementation libs.junit
     androidTestImplementation libs.runner
     androidTestImplementation libs.espresso.core
     implementation libs.lifecycle.extensions
 
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.05.00')
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation "androidx.compose.runtime:runtime"
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.foundation:foundation"
+    implementation "androidx.compose.foundation:foundation-layout"
+    implementation "androidx.compose.material:material"
+    implementation "androidx.compose.runtime:runtime-livedata"
+    implementation "androidx.compose.ui:ui-tooling"
+    implementation "com.github.bumptech.glide:compose:1.0.0-beta01"
 }

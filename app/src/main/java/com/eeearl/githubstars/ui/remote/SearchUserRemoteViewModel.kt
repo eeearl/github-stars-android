@@ -1,19 +1,21 @@
 package com.eeearl.githubstars.ui.remote
 
-import android.content.Context
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.eeearl.githubstars.db.DatabaseService
+import com.eeearl.githubstars.net.ApiClient
+import com.eeearl.githubstars.net.model.SearchUserRequestData
 import com.eeearl.githubstars.net.model.SearchUserResponse
 import com.eeearl.githubstars.ui.SearchUserListAdapter
 import com.eeearl.githubstars.ui.SearchUserRowItemType
 import com.eeearl.githubstars.ui.SearchUserRowRemoteItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,46 +38,67 @@ object SearchUserBindingAdapter {
     }
 }
 
-class SearchUserRemoteViewModel: ViewModel(), Callback<SearchUserResponse> {
+class SearchUserRemoteViewModel(
+    private val databaseService: DatabaseService,
+): ViewModel() {
 
-    val mList = ObservableArrayList<SearchUserRowRemoteItem>()
-    val mSearchText = ObservableField<String>()
-    lateinit var mContext: Context
+
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState = _uiState.asStateFlow()
 
     fun onSearchTextChanged(text: CharSequence) {
-        mSearchText.set(text.toString())
-    }
+        _uiState.update {
+            it.copy(text = text.toString())
+        }
 
-    override fun onFailure(call: Call<SearchUserResponse>, t: Throwable) {
-        println(t.toString())
-    }
+        val req = SearchUserRequestData(text.toString(), "desc", 1, 100)
+        ApiClient.searchUserInGithub(req, object : Callback<SearchUserResponse> {
+            override fun onResponse(
+                call: Call<SearchUserResponse>,
+                response: Response<SearchUserResponse>
+            ) {
+                when (response.isSuccessful) {
+                    true -> {
+                        val list = ArrayList<SearchUserRowRemoteItem>()
 
-    override fun onResponse(
-        call: Call<SearchUserResponse>,
-        response: Response<SearchUserResponse>
-    ) {
+                        println("list")
+                        response.body()?.userItems?.
+                        filter { it.name != null }?.
+                        forEach {
+                            val fav = databaseService.existUser(it.id)
+                            val rowItem = SearchUserRowRemoteItem(it.id, it.name ?: "", it.avatarUrl, fav)
 
-        when (response.isSuccessful) {
-            true -> {
-                val list = ArrayList<SearchUserRowRemoteItem>()
+                            if (it.name != null) {
+                                list.add(rowItem)
+                            }
+                        }
 
-                response.body()?.userItems?.
-                    filter { it.name != null }?.
-                    forEach {
-                    val fav = DatabaseService.getInstance(mContext).existUser(it.id)
-                    val rowItem = SearchUserRowRemoteItem(it.id, it.name ?: "", it.avatarUrl, fav)
-
-                    if (it.name != null) {
-                        list.add(rowItem)
+                        _uiState.update {
+                            it.copy(searchList = list)
+                        }
                     }
+                    else -> return
                 }
-
-                mList.clear()
-                mList.addAll(list)
-
             }
-            else -> return
+
+            override fun onFailure(call: Call<SearchUserResponse>, t: Throwable) {
+                println(t.toString())
+            }
+        })
+    }
+
+    fun onCheckFavorite(user: SearchUserRowRemoteItem, isChecked: Boolean) {
+        if (databaseService.existUser(user.id)) {
+            databaseService.deleteUser(user.id)
+//            val new = user.copy(favorite = isChecked)
+        } else {
+            databaseService.insertUser(user.id, user.name, user.thumbnailUrl)
         }
     }
+
+    data class UiState(
+        val searchList: List<SearchUserRowRemoteItem> = emptyList(),
+        val text: String = "",
+    )
 }
 
